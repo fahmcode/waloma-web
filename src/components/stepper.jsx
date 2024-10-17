@@ -3,8 +3,8 @@ import { Check, Circle } from "react-feather";
 
 const Stepper = ({ steps, currentStep }) => {
   return (
-    <div className="w-full max-w-3xl mx-auto">
-      <ol className="flex items-center">
+    <div className="w-full">
+      <ol className="flex items-center w-full">
         {steps.map((step, index) => (
           <li key={index} className="flex-1 relative">
             <div className="flex items-center">

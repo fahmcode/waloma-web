@@ -6,6 +6,7 @@ import {
   LogOut,
   Activity,
   ChevronDown,
+  MessageSquare,
 } from "react-feather";
 import { Link, Outlet } from "react-router-dom";
 
@@ -65,11 +66,11 @@ export default function NavbarLayout() {
               {/* Right side icons and profile */}
               <div className="flex items-center">
                 <Link
-                  to="/notifications"
+                  to="/app/messages"
                   className="p-2 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                 >
-                  <span className="sr-only">View notifications</span>
-                  <Bell className="h-5 w-5" />
+                  <span className="sr-only">View Messages</span>
+                  <MessageSquare className="h-5 w-5" />
                 </Link>
                 <button className="ml-3 p-2 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                   <span className="sr-only">Open settings</span>

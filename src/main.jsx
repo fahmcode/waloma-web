@@ -6,11 +6,14 @@ import NavbarLayout from "./layouts/nav.layout";
 import Listings from "./components/listings";
 import ProducDetail from "./components/ProductDetails";
 import ProfilePage from "./components/profile";
-import NotificationsPage from "./components/notifications";
 import ProductReviewPage from "./components/ratings";
+import Login from "./routes/login";
+import Register from "./routes/register";
+import Messages from "./routes/apps/messages";
 
 const router = createBrowserRouter([
-  { path: "/login", element: <div>Login</div> },
+  { path: "/login", element: <Login /> },
+  { path: "/register", element: <Register /> },
   {
     index: "/",
     element: <NavbarLayout />,
@@ -19,8 +22,8 @@ const router = createBrowserRouter([
       { path: "listings/:listId", element: <ProducDetail /> },
       { path: "listings/:listId/review", element: <ProductReviewPage /> },
 
-      { path: "profile", element: <ProfilePage /> },
-      { path: "notifications", element: <NotificationsPage /> },
+      { path: "app/profile", element: <ProfilePage /> },
+      { path: "app/messages", element: <Messages /> },
     ],
   },
 ]);

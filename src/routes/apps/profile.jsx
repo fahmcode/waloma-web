@@ -47,12 +47,12 @@ const IconButton = ({ icon, label }) => (
   </button>
 );
 
-export default function ProfilePage() {
+export default function Profile() {
   const [activeTab, setActiveTab] = useState("general");
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex-1 bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="relative h-48 bg-gradient-to-r from-primary to-primary-dark">

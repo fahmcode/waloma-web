@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from "react";
 import {
-  Bell,
   Settings,
   User,
   LogOut,
   Activity,
   ChevronDown,
   MessageSquare,
+  ShoppingCart,
 } from "react-feather";
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
+
+const links = [
+  { to: "/listings", label: "All listings" },
+  { to: "/jobs", label: "Jobs" },
+  { to: "/cars", label: "Cars" },
+  { to: "/homes", label: "Homes" },
+];
+
+const app_links = [
+  { to: "/app/messages", label: "View Messages", icon: MessageSquare },
+  { to: "/app/carts", label: "Carts", icon: ShoppingCart },
+];
 
 export default function NavbarLayout() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -34,48 +46,43 @@ export default function NavbarLayout() {
             <div className="flex justify-between h-16">
               <div className="flex items-center">
                 {/* Logo */}
-                <a href="/" className="flex-shrink-0 flex items-center">
-                  <span className="text-xl font-semibold text-gray-900 mr-8">
+                <Link to="/" className="flex-shrink-0 flex items-center">
+                  <span className="text-2xl font-bold text-gray-900 mr-8">
                     Waloma
                   </span>
-                </a>
+                </Link>
 
                 {/* Navigation Links */}
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                  <a
-                    href="/shop"
-                    className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-gray-900 text-sm font-medium"
-                  >
-                    Shop
-                  </a>
-                  <a
-                    href="/real-estate"
-                    className="text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium"
-                  >
-                    Real Estate
-                  </a>
-                  <a
-                    href="/car-rental"
-                    className="text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium"
-                  >
-                    Car Rental
-                  </a>
+                  {links.map((link) => (
+                    <NavLink
+                      key={link.to}
+                      to={link.to}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-gray-900 text-sm font-medium"
+                          : "text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium"
+                      }
+                    >
+                      {link.label}
+                    </NavLink>
+                  ))}
                 </div>
               </div>
 
               {/* Right side icons and profile */}
               <div className="flex items-center">
-                <Link
-                  to="/app/messages"
-                  className="p-2 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                >
-                  <span className="sr-only">View Messages</span>
-                  <MessageSquare className="h-5 w-5" />
-                </Link>
-                <button className="ml-3 p-2 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                  <span className="sr-only">Open settings</span>
-                  <Settings className="h-5 w-5" />
-                </button>
+                {/* Messages, Profile, Carts */}
+                {app_links.map((link) => (
+                  <NavLink
+                    key={link.to}
+                    to={link.to}
+                    className="p-2 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                  >
+                    <span className="sr-only">{link.label}</span>
+                    <link.icon className="h-5 w-5" />
+                  </NavLink>
+                ))}
 
                 {/* Vertical separator */}
                 <div className="ml-3 h-6 w-px bg-gray-200"></div>
@@ -108,28 +115,27 @@ export default function NavbarLayout() {
                       aria-orientation="vertical"
                       aria-labelledby="user-menu"
                     >
-                      <Link
+                      <NavLink
                         to="/app/profile"
                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
                       >
-                        <User className="mr-3 h-4 w-4" /> Your Profile
-                      </Link>
+                        <User className="mr-3 h-4 w-4" /> Profile
+                      </NavLink>
                       <a
                         href="#"
                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
                       >
-                        <Activity className="mr-3 h-4 w-4" /> Your Activities
+                        <Activity className="mr-3 h-4 w-4" /> Activities
                       </a>
                       <div className="border-t border-gray-100 my-1"></div>
-                      <a
-                        href="#"
-                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      <button
+                        className="w-full flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100"
                         role="menuitem"
                       >
                         <LogOut className="mr-3 h-4 w-4" /> Sign out
-                      </a>
+                      </button>
                     </div>
                   )}
                 </div>

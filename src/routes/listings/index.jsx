@@ -230,7 +230,7 @@ const priceRanges = [
   "$10,000+",
 ];
 
-export default function DiverseListingSection() {
+export default function Listings() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedPriceRange, setSelectedPriceRange] = useState("Any");
@@ -319,7 +319,7 @@ export default function DiverseListingSection() {
   );
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container px-4 py-8 mx-auto">
       {/* Search Bar */}
       <div className="relative mb-6">
         <Search

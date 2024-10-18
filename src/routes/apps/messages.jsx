@@ -103,7 +103,7 @@ export default function Messages() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex flex-1 bg-gray-50">
       {/* User list sidebar */}
       <div className="w-1/4 bg-white border-r border-gray-200 shadow-sm overflow-hidden flex flex-col">
         <div className="p-4 border-b border-gray-200">
@@ -173,21 +173,10 @@ export default function Messages() {
               <p className="text-sm text-gray-500">{selectedUser.status}</p>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <button className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200">
-              <Phone size={20} className="text-gray-600" />
-            </button>
-            <button className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200">
-              <Video size={20} className="text-gray-600" />
-            </button>
-            <button className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200">
-              <MoreVertical size={20} className="text-gray-600" />
-            </button>
-          </div>
         </div>
 
         {/* Messages area */}
-        <div className="flex-grow p-6 bg-gray-50 overflow-y-auto">
+        <div className="flex-1 p-6 bg-gray-50 overflow-y-auto">
           {messages.map((message) => (
             <div
               key={message.id}
@@ -198,7 +187,7 @@ export default function Messages() {
               <div
                 className={`max-w-md p-3 rounded-lg shadow-sm ${
                   message.senderId === 1
-                    ? "bg-blue-600 text-white"
+                    ? "bg-gray-900 text-white"
                     : "bg-white text-gray-800"
                 }`}
               >
@@ -223,11 +212,11 @@ export default function Messages() {
               placeholder="Type a message..."
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              className="flex-grow px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="flex-grow px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
             />
             <button
               type="submit"
-              className="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="p-2 bg-gray-700 text-white rounded-md hover:bg-black transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
             >
               <Send size={20} />
               <span className="sr-only">Send message</span>

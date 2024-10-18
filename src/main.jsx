@@ -1,15 +1,20 @@
+import "./index.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 import NavbarLayout from "./layouts/nav.layout";
-import Listings from "./components/listings";
-import ProducDetail from "./components/ProductDetails";
-import ProfilePage from "./components/profile";
-import ProductReviewPage from "./components/ratings";
-import Login from "./routes/login";
-import Register from "./routes/register";
+import Profile from "./routes/apps/profile";
 import Messages from "./routes/apps/messages";
+import Listings from "./routes/listings";
+import Cars from "./routes/listings/cars";
+import Homes from "./routes/listings/homes";
+import Jobs from "./routes/listings/jobs";
+import ListingDetails from "./routes/listings/details";
+import ListingReviews from "./routes/listings/ratings";
+import Login from "./routes/auth/login";
+import Register from "./routes/auth/register";
+import Carts from "./routes/apps/carts";
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
@@ -19,11 +24,16 @@ const router = createBrowserRouter([
     element: <NavbarLayout />,
     children: [
       { index: true, element: <Listings /> },
-      { path: "listings/:listId", element: <ProducDetail /> },
-      { path: "listings/:listId/review", element: <ProductReviewPage /> },
+      { path: "listings", element: <Listings /> },
+      { path: "cars", element: <Cars /> },
+      { path: "homes", element: <Homes /> },
+      { path: "jobs", element: <Jobs /> },
+      { path: "listings/:listId", element: <ListingDetails /> },
+      { path: "listings/:listId/review", element: <ListingReviews /> },
 
-      { path: "app/profile", element: <ProfilePage /> },
+      { path: "app/profile", element: <Profile /> },
       { path: "app/messages", element: <Messages /> },
+      { path: "app/carts", element: <Carts /> },
     ],
   },
 ]);

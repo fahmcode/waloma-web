@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Star,
   Heart,
@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Airplay,
 } from "react-feather";
+import { Link } from "react-router-dom";
 
 // This would typically come from a database or API
 const item = {
@@ -69,7 +70,7 @@ const getCategoryIcon = (category) => {
   }
 };
 
-export default function ProducDetail() {
+export default function ListingDetails() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const nextImage = () => {
@@ -164,9 +165,12 @@ export default function ProducDetail() {
               <button className="flex-1 bg-black text-white px-4 py-2 rounded-md flex items-center justify-center hover:bg-gray-900">
                 <DollarSign className="mr-2 h-4 w-4" /> Make an Offer
               </button>
-              <button className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-md flex items-center justify-center hover:bg-gray-100">
-                <Heart className="mr-2 h-4 w-4" /> Save
-              </button>
+              <Link
+                to="review"
+                className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-md flex items-center justify-center hover:bg-gray-100"
+              >
+                <Star className="mr-2 h-4 w-4" /> Review this Product
+              </Link>
               <button className="border border-gray-300 text-gray-700 p-2 rounded-md hover:bg-gray-100">
                 <Share2 className="h-4 w-4" />
               </button>

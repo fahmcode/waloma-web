@@ -80,20 +80,6 @@ const ReviewItem = ({ review }) => {
             </span>
           </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={() => setHelpfulCount(helpfulCount + 1)}
-            className="flex items-center text-sm text-gray-600 hover:text-gray-900"
-          >
-            <ThumbsUp size={14} className="mr-1" /> {helpfulCount}
-          </button>
-          <button
-            onClick={() => setNotHelpfulCount(notHelpfulCount + 1)}
-            className="flex items-center text-sm text-gray-600 hover:text-gray-900"
-          >
-            <ThumbsDown size={14} className="mr-1" /> {notHelpfulCount}
-          </button>
-        </div>
       </div>
       <p className={`mt-2 text-gray-700 ${!isExpanded && "line-clamp-3"}`}>
         {review.content}
@@ -110,13 +96,13 @@ const ReviewItem = ({ review }) => {
   );
 };
 
-export default function ProductReviewPage() {
+export default function ListingReviews() {
   const [sortBy, setSortBy] = useState("most_recent");
   const [filterBy, setFilterBy] = useState("all");
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+    <div className="bg-gray-50">
+      <div className="container px-4 py-8">
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="p-6 border-b">
             <div className="flex items-center">
@@ -155,7 +141,6 @@ export default function ProductReviewPage() {
           </div>
 
           <div className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Customer Reviews</h2>
             <div className="flex flex-col md:flex-row gap-8">
               <div className="w-full md:w-1/3">
                 <h3 className="text-lg font-semibold mb-2">Rating Breakdown</h3>
@@ -169,44 +154,11 @@ export default function ProductReviewPage() {
                 </div>
               </div>
               <div className="w-full md:w-2/3">
-                <div className="flex justify-between items-center mb-4">
-                  <div className="flex space-x-2">
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="border rounded-md px-2 py-1"
-                    >
-                      <option value="most_recent">Most Recent</option>
-                      <option value="highest_rated">Highest Rated</option>
-                      <option value="lowest_rated">Lowest Rated</option>
-                    </select>
-                    <select
-                      value={filterBy}
-                      onChange={(e) => setFilterBy(e.target.value)}
-                      className="border rounded-md px-2 py-1"
-                    >
-                      <option value="all">All Stars</option>
-                      <option value="5">5 Stars</option>
-                      <option value="4">4 Stars</option>
-                      <option value="3">3 Stars</option>
-                      <option value="2">2 Stars</option>
-                      <option value="1">1 Star</option>
-                    </select>
-                  </div>
-                  <button className="flex items-center text-blue-600 hover:text-blue-800">
-                    <Filter size={16} className="mr-1" />
-                    More Filters
-                  </button>
-                </div>
+                <h3 className="text-lg font-semibold mb-2">Latest reviews</h3>
                 <div className="space-y-4">
                   {reviews.map((review) => (
                     <ReviewItem key={review.id} review={review} />
                   ))}
-                </div>
-                <div className="mt-6">
-                  <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">
-                    Load More Reviews
-                  </button>
                 </div>
               </div>
             </div>
@@ -241,7 +193,7 @@ export default function ProductReviewPage() {
                 <input
                   type="text"
                   id="review-title"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                   placeholder="Summarize your review"
                 />
               </div>
@@ -255,13 +207,13 @@ export default function ProductReviewPage() {
                 <textarea
                   id="review-content"
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                   placeholder="Write your review here"
                 ></textarea>
               </div>
               <button
                 type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-900"
               >
                 Submit Review
               </button>

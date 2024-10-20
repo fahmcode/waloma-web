@@ -16,6 +16,7 @@ import Login from "./routes/auth/login";
 import Register from "./routes/auth/register";
 import Carts from "./routes/apps/carts";
 import PasswordReset from "./routes/auth/reset-password";
+import { AuthProvider } from "./context/auth-context";
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
@@ -42,6 +43,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );

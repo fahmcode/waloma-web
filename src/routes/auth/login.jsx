@@ -1,15 +1,45 @@
-import React, { useState } from "react";
-import { Mail, Lock, Eye, EyeOff, User } from "react-feather";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { baseUrl } from "../../context/constants";
+import { Lock, Eye, EyeOff, User } from "react-feather";
+import ErrorMessage from "../../components/error-message";
+import { useAuth } from "../../context/auth-context";
 
 export default function PremiumLogin() {
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
+  const [error, setError] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Login attempted with:", { username, password });
+    setError(null);
+
+    try {
+      const response = await axios.post(`${baseUrl}/api/auth/login`, {
+        username,
+        password,
+      });
+
+      if (response.data.success) {
+        const { user, token } = response.data;
+        setUser(user);
+        navigate("/");
+      } else {
+        console.error("Login failed:", response.data.message);
+      }
+    } catch (error) {
+      if (error.response) {
+        setError(error.response.data.message);
+      } else if (error.request) {
+        setError("No response received from the server");
+      } else {
+        setError("An error occurred while setting up the request");
+      }
+    }
   };
 
   return (
@@ -22,18 +52,22 @@ export default function PremiumLogin() {
           <p className="text-gray-600">Sign in to your account</p>
         </div>
 
+        {error && (
+          <ErrorMessage message={error} onClose={() => setError(null)} />
+        )}
+
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label
-              htmlFor="email"
+              htmlFor="username"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Username
             </label>
             <div className="relative">
               <input
-                type="email"
-                id="email"
+                type="text"
+                id="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required

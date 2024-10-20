@@ -15,10 +15,12 @@ import ListingReviews from "./routes/listings/ratings";
 import Login from "./routes/auth/login";
 import Register from "./routes/auth/register";
 import Carts from "./routes/apps/carts";
+import PasswordReset from "./routes/auth/reset-password";
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
+  { path: "/reset-password", element: <PasswordReset /> },
   {
     index: "/",
     element: <NavbarLayout />,

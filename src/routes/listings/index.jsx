@@ -10,7 +10,6 @@ import {
   Heart,
   Home,
   Search,
-  ShoppingCart,
   Star,
   Truck,
   X,

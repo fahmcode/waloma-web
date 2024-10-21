@@ -11,7 +11,6 @@ import { Link, NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../context/auth-context";
 
 const links = [
-  { to: "/listings", label: "All listings" },
   { to: "/jobs", label: "Jobs" },
   { to: "/cars", label: "Cars" },
   { to: "/homes", label: "Homes" },
@@ -23,7 +22,7 @@ const app_links = [
 ];
 
 export default function NavbarLayout() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
@@ -135,6 +134,7 @@ export default function NavbarLayout() {
                         <button
                           className="w-full flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100"
                           role="menuitem"
+                          onClick={() => setUser(null)}
                         >
                           <LogOut className="mr-3 h-4 w-4" /> Sign out
                         </button>

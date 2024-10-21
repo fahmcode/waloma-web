@@ -16,7 +16,7 @@ import {
   ChevronRight,
   Airplay,
 } from "react-feather";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // This would typically come from a database or API
 const item = {
@@ -71,6 +71,7 @@ const getCategoryIcon = (category) => {
 };
 
 export default function ListingDetails() {
+  const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const nextImage = () => {
@@ -118,7 +119,10 @@ export default function ListingDetails() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <button className="flex items-center text-gray-600 hover:text-gray-900 mb-4">
+        <button
+          className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
+          onClick={() => navigate(-1)}
+        >
           <ArrowLeft className="mr-2 h-4 w-4" /> Back to Listings
         </button>
 
@@ -171,9 +175,6 @@ export default function ListingDetails() {
               >
                 <Star className="mr-2 h-4 w-4" /> Review this Product
               </Link>
-              <button className="border border-gray-300 text-gray-700 p-2 rounded-md hover:bg-gray-100">
-                <Share2 className="h-4 w-4" />
-              </button>
             </div>
 
             <div className="border-t pt-6">

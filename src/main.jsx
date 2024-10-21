@@ -27,7 +27,6 @@ const router = createBrowserRouter([
     element: <NavbarLayout />,
     children: [
       { index: true, element: <Listings /> },
-      { path: "listings", element: <Listings /> },
       { path: "cars", element: <Cars /> },
       { path: "homes", element: <Homes /> },
       { path: "jobs", element: <Jobs /> },

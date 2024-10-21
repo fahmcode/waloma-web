@@ -1,20 +1,8 @@
-import React, { useState } from "react";
-import {
-  User,
-  Shield,
-  Activity,
-  Edit,
-  Camera,
-  Lock,
-  Key,
-  Bell,
-  CreditCard,
-  LogOut,
-  Trash2,
-  Eye,
-  EyeOff,
-} from "react-feather";
+import axios from "axios";
+import { useState } from "react";
+import { User, Shield, Activity, Eye, EyeOff } from "react-feather";
 import { useAuth } from "../../context/auth-context";
+import { baseUrl } from "../../context/constants";
 
 const TabButton = ({ icon, label, active, onClick }) => (
   <button
@@ -29,18 +17,80 @@ const TabButton = ({ icon, label, active, onClick }) => (
     <span className="ml-2">{label}</span>
   </button>
 );
-
-const IconButton = ({ icon, label }) => (
-  <button className="flex flex-col items-center justify-center w-24 h-24 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
-    <div className="p-3 bg-white rounded-full shadow-md mb-2">{icon}</div>
-    <span className="text-sm text-gray-700">{label}</span>
-  </button>
-);
-
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [activeTab, setActiveTab] = useState("general");
   const [showPassword, setShowPassword] = useState(false);
+
+  const [first_name, setFirstName] = useState(user?.first_name || "");
+  const [last_name, setLastName] = useState(user?.last_name || "");
+  const [bio, setBio] = useState(user?.bio || "");
+
+  const [new_password, setNewPassword] = useState("");
+  const [current_password, setCurrentPassword] = useState("");
+  const [new_password_confirm, setNewPasswordConfirm] = useState("");
+
+  const handleChangePassword = async () => {
+    if (new_password !== new_password_confirm) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    if (!user || !user.id) {
+      alert("Please login to access this page.");
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        `${baseUrl}/api/users/${user.id}/change-password`,
+        {
+          current_password,
+          new_password,
+        },
+        { headers: { Authorization: `Bearer ${user.token}` } }
+      );
+      if (response.status === 200) {
+        alert("Password updated successfully!");
+        setCurrentPassword("");
+        setNewPassword("");
+        setNewPasswordConfirm("");
+      }
+    } catch (error) {
+      console.error(error);
+      alert(
+        "Failed to update password. Please check your current password and try again."
+      );
+    }
+  };
+
+  const handleUserInfoChange = async () => {
+    if (!user || !user.id) {
+      alert("Please login to access this page.");
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        `${baseUrl}/api/users/${user.id}`,
+        {
+          first_name,
+          last_name,
+          bio,
+        },
+        { headers: { Authorization: `Bearer ${user.token}` } }
+      );
+      if (response.data && response.data.success) {
+        alert("User information updated successfully!");
+        setUser(response.data.user);
+      }
+    } catch (error) {
+      console.error(error);
+      alert(
+        "Failed to update user information. Please check your inputs and try again."
+      );
+    }
+  };
 
   return (
     <div className="flex-1 bg-gray-50">
@@ -70,12 +120,6 @@ export default function Profile() {
               active={activeTab === "security"}
               onClick={() => setActiveTab("security")}
             />
-            <TabButton
-              icon={<Activity size={18} />}
-              label="Activities"
-              active={activeTab === "activities"}
-              onClick={() => setActiveTab("activities")}
-            />
           </div>
           <div className="px-6 pb-6">
             {activeTab === "general" && (
@@ -91,7 +135,8 @@ export default function Profile() {
                       </label>
                       <input
                         type="text"
-                        value={user.first_name}
+                        value={first_name}
+                        onChange={(e) => setFirstName(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                     </div>
@@ -102,7 +147,8 @@ export default function Profile() {
                       </label>
                       <input
                         type="text"
-                        value={user.last_name}
+                        value={last_name}
+                        onChange={(e) => setLastName(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                     </div>
@@ -114,26 +160,18 @@ export default function Profile() {
                       <input
                         type="email"
                         value={user.email}
+                        disabled
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Location
+                        Username
                       </label>
                       <input
                         type="text"
-                        value={user.location}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Website
-                      </label>
-                      <input
-                        type="url"
-                        value={user.website}
+                        value={user.username}
+                        disabled
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                     </div>
@@ -144,13 +182,17 @@ export default function Profile() {
                     Bio
                   </label>
                   <textarea
-                    value={user.bio}
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
                     rows={4}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 <div className="flex justify-end">
-                  <button className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-900">
+                  <button
+                    className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-900"
+                    onClick={handleUserInfoChange}
+                  >
                     Save Changes
                   </button>
                 </div>
@@ -169,6 +211,8 @@ export default function Profile() {
                       </label>
                       <div className="relative">
                         <input
+                          value={current_password}
+                          onChange={(e) => setCurrentPassword(e.target.value)}
                           type={showPassword ? "text" : "password"}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary pr-10"
                         />
@@ -189,6 +233,8 @@ export default function Profile() {
                         New Password
                       </label>
                       <input
+                        value={new_password}
+                        onChange={(e) => setNewPassword(e.target.value)}
                         type="password"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                       />
@@ -198,6 +244,8 @@ export default function Profile() {
                         Confirm New Password
                       </label>
                       <input
+                        value={new_password_confirm}
+                        onChange={(e) => setNewPasswordConfirm(e.target.value)}
                         type="password"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                       />
@@ -205,61 +253,12 @@ export default function Profile() {
                   </div>
                 </div>
                 <div className="flex justify-end">
-                  <button className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-900">
+                  <button
+                    className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-900"
+                    onClick={handleChangePassword}
+                  >
                     Update Security Settings
                   </button>
-                </div>
-              </div>
-            )}
-            {activeTab === "activities" && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold mb-4">
-                  Recent Activities
-                </h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <IconButton icon={<Edit size={24} />} label="Edit Profile" />
-                  <IconButton
-                    icon={<Camera size={24} />}
-                    label="Update Photo"
-                  />
-                  <IconButton icon={<Lock size={24} />} label="Privacy" />
-                  <IconButton icon={<Key size={24} />} label="Password" />
-                  <IconButton icon={<Bell size={24} />} label="Notifications" />
-                  <IconButton icon={<CreditCard size={24} />} label="Billing" />
-                  <IconButton icon={<LogOut size={24} />} label="Sign Out" />
-                  <IconButton
-                    icon={<Trash2 size={24} />}
-                    label="Delete Account"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Login History</h3>
-                  <table className="w-full">
-                    <thead>
-                      <tr className="bg-gray-100">
-                        <th className="px-4 py-2 text-left">Date</th>
-                        <th className="px-4 py-2 text-left">IP Address</th>
-                        <th className="px-4 py-2 text-left">Location</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className="px-4 py-2">2023-05-15 10:30 AM</td>
-                        <td className="px-4 py-2">192.168.1.1</td>
-                        <td className="px-4 py-2">New York, USA</td>
-                      </tr>
-                      <tr className="bg-gray-50">
-                        <td className="px-4 py-2">2023-05-14 3:45 PM</td>
-                        <td className="px-4 py-2">192.168.1.2</td>
-                        <td className="px-4 py-2">Los Angeles, USA</td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-2">2023-05-13 9:15 AM</td>
-                        <td className="px-4 py-2">192.168.1.3</td>
-                        <td className="px-4 py-2">Chicago, USA</td>
-                      </tr>
-                    </tbody>
-                  </table>
                 </div>
               </div>
             )}
